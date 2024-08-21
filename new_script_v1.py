@@ -154,7 +154,7 @@ def find_message(url):
                 print(f"Error processing response: {e}")
         else:
             print("An error occurred: Not JSON Payload...")
-            print(r.content)
+            
 
 def main():
     global _config, db, _headers, _s
