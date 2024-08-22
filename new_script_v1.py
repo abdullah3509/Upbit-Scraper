@@ -8,6 +8,7 @@ from collections import defaultdict
 from datetime import datetime
 import logging
 import random
+import uuid
 
 requests.packages.urllib3.disable_warnings()
 
@@ -110,8 +111,12 @@ def make_request(url):
     
     try:
         proxies = get_random_proxy()
-        cache_buster = str(random.randint(100000, 999999))
+        # cache_buster = str(random.randint(100000, 999999))
+        # url_uncached = f"{url}&cb={cache_buster}"
+        
+        cache_buster = str(uuid.uuid4())
         url_uncached = f"{url}&cb={cache_buster}"
+
 
         # Rate limiting logic
         if proxies:
@@ -119,9 +124,9 @@ def make_request(url):
 
         if proxies is None:
             print("No valid proxy available, skipping proxy for this request.")
-            r = _s.get(url_uncached, headers=headers, timeout=10)
+            r = _s.get(url_uncached, headers=headers, timeout=3)
         else:
-            r = _s.get(url_uncached, headers=headers, proxies=proxies, timeout=10)
+            r = _s.get(url_uncached, headers=headers, proxies=proxies, timeout=3)
         
         if r.status_code == 200:
             print(r.headers.get('cf-cache-status', 'No cache status'))
