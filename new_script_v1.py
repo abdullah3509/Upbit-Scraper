@@ -100,7 +100,6 @@ def make_request(url):
     'sec-fetch-mode': 'navigate',
     'sec-fetch-user': '?1',
     'sec-fetch-dest': 'document',
-    'accept-encoding': 'gzip, deflate, br, zstd',
     'accept-language': f'ko-KR, ko;q=1, it-IT;q=0.1 {str(random.randint(1,5000000))}',
     }
     
@@ -153,9 +152,8 @@ def find_message(url):
             except Exception as e:
                 print(f"Error processing response: {e}")
         else:
-            print("An error occurred: Not JSON Payload...")
+            print("Rate limit for the proxy exceeded. Temporary banned IP from UPBIT.")
             
-
 def main():
     global _config, db, _headers, _s
 
