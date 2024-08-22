@@ -6,13 +6,17 @@ import time
 from discord_hooks import Webhook
 from collections import defaultdict
 from datetime import datetime
-
+import logging
 import random
 
 requests.packages.urllib3.disable_warnings()
 
 # Global variables
-
+logging.basicConfig(filename = f"logs.log", 
+                    level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S'
+                    )
 proxy_request_times = defaultdict(list)
 stop_event = threading.Event()
 
@@ -27,6 +31,7 @@ def send_embed(code, title):
     embed.post()
     message_ = datetime.now().strftime("[%H:%M:%S]") + " [NEW NOTICE FOUND] " + str(code)
     print(message_)
+    logging.info(" [NEW NOTICE SENT] " + str(code))
 
 def printError(e):
     import sys
@@ -133,11 +138,13 @@ def make_request(url):
 def find_message(url):
     global db
     while not stop_event.is_set():
+        start_time = datetime.now()
         r = make_request(url)
         if r is None:
             continue
         elif r.text.startswith('{'):
             try:
+                
                 data = r.json()
                 for message in data['data']['notices']:
                     code = str(message['id'])
@@ -145,6 +152,10 @@ def find_message(url):
                     if code not in db:
                         db[code] = {"Title": title}
                         send_embed(code, title)
+                        end_time = datetime.now()
+                        elapsed_time = (end_time - start_time).total_seconds() * 1000
+                        logging.info(f"Total time taken by the bot: {elapsed_time}-ms.")
+
                         with open("db.json", "w", encoding='utf-8') as f:
                             json.dump(db, f, indent=4, sort_keys=True, ensure_ascii=False)
             except json.JSONDecodeError as e:
