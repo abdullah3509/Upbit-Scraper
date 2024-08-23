@@ -5,7 +5,7 @@ import threading
 import time
 from discord_hooks import Webhook
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime , timedelta
 import logging
 import random
 import uuid
@@ -23,14 +23,15 @@ stop_event = threading.Event()
 
 def send_embed(code, title):
     global _config
-    time_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    # time_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    time_str = (datetime.now() - timedelta(seconds=2)).strftime('%Y-%m-%d %H:%M:%S')
     embed = Webhook(_config["webhook"], color=16711680)
     link = f"https://upbit.com/service_center/notice?id={code}"
     embed.set_title(title=title, url=link)
     embed.add_field(name='Timestamp', value=time_str)
     embed.set_footer(text="to be changed by client request 2", ts=True)
     embed.post()
-    message_ = datetime.now().strftime("[%H:%M:%S]") + " [NEW NOTICE FOUND] " + str(code)
+    message_ = time_str + " [NEW NOTICE FOUND] " + str(code)
     print(message_)
     logging.info(" [NEW NOTICE SENT] " + str(code))
 
