@@ -18,6 +18,7 @@ logging.basicConfig(filename = f"logs.log",
                     format='%(asctime)s - %(levelname)s - %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S'
                     )
+
 proxy_request_times = defaultdict(list)
 stop_event = threading.Event()
 
@@ -201,7 +202,7 @@ if __name__ == "__main__":
     print(datetime.now().strftime("[%H:%M:%S]") + "Loading data...")
 
     # Load database
-    with open("db.json", "r") as f:
+    with open("db.json", "r",encoding='utf-8') as f:
         db = json.load(f)
 
     # Load config and proxies
