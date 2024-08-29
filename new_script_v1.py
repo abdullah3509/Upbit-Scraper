@@ -22,10 +22,9 @@ logging.basicConfig(filename = f"logs.log",
 proxy_request_times = defaultdict(list)
 stop_event = threading.Event()
 
-def send_embed(code, title):
+def send_embed(code, time_str,title):
     global _config
-    # time_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    time_str = (datetime.now() - timedelta(seconds=2)).strftime('%Y-%m-%d %H:%M:%S')
+    
     embed = Webhook(_config["webhook"], color=16711680)
     link = f"https://upbit.com/service_center/notice?id={code}"
     embed.set_title(title=title, url=link)
@@ -145,8 +144,8 @@ def make_request(url):
 def find_message(url):
     global db
     while not stop_event.is_set():
-        start_time = datetime.now()
         r = make_request(url)
+        start_time = datetime.now()
         if r is None:
             continue
         elif r.text.startswith('{'):
@@ -158,7 +157,8 @@ def find_message(url):
                     title = message['title']
                     if code not in db:
                         db[code] = {"Title": title}
-                        send_embed(code, title)
+                        time_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                        send_embed(code,time_str, title)
                         end_time = datetime.now()
                         elapsed_time = (end_time - start_time).total_seconds() * 1000
                         logging.info(f"Total time taken by the bot: {elapsed_time}-ms.")
