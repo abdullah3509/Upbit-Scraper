@@ -182,14 +182,14 @@ def main():
         print("Script started. Press Ctrl + C to stop.")
 
         threads = []
-        for _ in range(10):
+        for _ in range(5):
             thread = threading.Thread(target=find_message, args=(base_url,))
             thread.start()
             threads.append(thread)
             time.sleep(0.1)
 
         while True:
-            time.sleep(1)
+            time.sleep(0.5)
 
     except KeyboardInterrupt:
         print("\nScript terminated by user (Ctrl + C).")
