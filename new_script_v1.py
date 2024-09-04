@@ -156,7 +156,7 @@ def find_message(url):
         r = make_request(url)
         start_time = datetime.now()
         if r is None:
-            continue
+            continue 
         elif r.text.startswith('{'):
             try:
 
