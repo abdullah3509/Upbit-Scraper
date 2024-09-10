@@ -182,7 +182,7 @@ def main():
         print("Script started. Press Ctrl + C to stop.")
 
         threads = []
-        for _ in range(1):
+        for _ in range(2):
             thread = threading.Thread(target=find_message, args=(base_url,))
             thread.start()
             threads.append(thread)
