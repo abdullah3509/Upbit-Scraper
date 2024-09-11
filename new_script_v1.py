@@ -51,7 +51,7 @@ def read_config():
         return json.load(f)
 
 def load_proxies():
-    with open("proxies.txt", "r") as f:
+    with open("new_proxies.txt", "r") as f:
         return [line.strip() for line in f if line.strip()]
 
 def write_database():
@@ -92,7 +92,7 @@ def rate_limit(proxy):
         proxy_request_times[proxy] = proxy_request_times[proxy][1:]  # Remove the oldest timestamp
 
     proxy_request_times[proxy].append(time.time())
-
+    
 def make_request(url):
     global proxy_request_times, _s
 
@@ -122,7 +122,7 @@ def make_request(url):
         # Rate limiting logic
         if proxies:
             rate_limit(proxies['http'])
-
+        
         if proxies is None:
             print("No valid proxy available, skipping proxy for this request.")
             r = _s.get(url_uncached, headers=headers, timeout=3)
@@ -144,6 +144,10 @@ def make_request(url):
 def find_message(url):
     global db
     while not stop_event.is_set():
+        #implement time.sleep()
+        random_sleep_time = random.uniform(0,5)
+        print(f"sleep: {int(random_sleep_time)}")
+        time.sleep(int(random_sleep_time))
         r = make_request(url)
         start_time = datetime.now()
         if r is None:
@@ -178,7 +182,7 @@ def main():
     try:
         _s = requests.Session()
 
-        base_url = 'https://api-manager.upbit.com/api/v1/announcements?os=web&page=1&per_page=10&category=all'
+        base_url = 'https://api-manager.upbit.com/api/v1/announcements?os=web&page=1&per_page=20&category=all'
         print("Script started. Press Ctrl + C to stop.")
 
         threads = []
