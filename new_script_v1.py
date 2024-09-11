@@ -51,7 +51,7 @@ def read_config():
         return json.load(f)
 
 def load_proxies():
-    with open("new_proxies.txt", "r") as f:
+    with open("proxies.txt", "r") as f:
         return [line.strip() for line in f if line.strip()]
 
 def write_database():
@@ -146,7 +146,6 @@ def find_message(url):
     while not stop_event.is_set():
         #implement time.sleep()
         random_sleep_time = random.uniform(0,5)
-        print(f"sleep: {int(random_sleep_time)}")
         time.sleep(int(random_sleep_time))
         r = make_request(url)
         start_time = datetime.now()
