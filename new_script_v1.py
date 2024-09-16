@@ -51,7 +51,7 @@ def read_config():
         return json.load(f)
 
 def load_proxies():
-    with open("proxies.txt", "r") as f:
+    with open("proxies_D.txt", "r") as f:
         return [line.strip() for line in f if line.strip()]
 
 def write_database():
@@ -112,12 +112,9 @@ def make_request(url):
 
     try:
         proxies = get_random_proxy()
-        # cache_buster = str(random.randint(100000, 999999))
-        # url_uncached = f"{url}&cb={cache_buster}"
-
+    
         cache_buster = str(uuid.uuid4())
         url_uncached = f"{url}&cb={cache_buster}"
-
 
         # Rate limiting logic
         if proxies:
@@ -145,15 +142,13 @@ def find_message(url):
     global db
     while not stop_event.is_set():
         #implement time.sleep()
-        random_sleep_time = random.uniform(0,5)
+        random_sleep_time = random.uniform(random.uniform(0,5),random.uniform(6,10))
         time.sleep(int(random_sleep_time))
         r = make_request(url)
         start_time = datetime.now()
-        if r is None:
-            continue
-        elif r.text.startswith('{'):
-            try:
 
+        if r.text.startswith('{'):
+            try:
                 data = r.json()
                 for message in data['data']['notices']:
                     code = str(message['id'])
@@ -180,7 +175,7 @@ def main():
 
     try:
         _s = requests.Session()
-
+                   
         base_url = 'https://api-manager.upbit.com/api/v1/announcements?os=web&page=1&per_page=20&category=all'
         print("Script started. Press Ctrl + C to stop.")
 
