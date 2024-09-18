@@ -146,8 +146,9 @@ def find_message(url):
         time.sleep(int(random_sleep_time))
         r = make_request(url)
         start_time = datetime.now()
-
-        if r.text.startswith('{'):
+        if r is None:
+            continue
+        elif r.text.startswith('{'):
             try:
                 data = r.json()
                 for message in data['data']['notices']:
@@ -169,6 +170,8 @@ def find_message(url):
                 print(f"Error processing response: {e}")
         else:
             print("Rate limit for the proxy exceeded. Temporary banned IP from UPBIT.")
+        
+
 
 def main():
     global _config, db, _headers, _s
