@@ -141,9 +141,6 @@ def make_request(url):
 def find_message(url):
     global db
     while not stop_event.is_set():
-        #implement time.sleep()
-        random_sleep_time = random.uniform(random.uniform(0,5),random.uniform(6,10))
-        time.sleep(int(random_sleep_time))
         r = make_request(url)
         start_time = datetime.now()
         if r is None:
@@ -183,7 +180,7 @@ def main():
         print("Script started. Press Ctrl + C to stop.")
 
         threads = []
-        for _ in range(2):
+        for _ in range(3):
             thread = threading.Thread(target=find_message, args=(base_url,))
             thread.start()
             threads.append(thread)
