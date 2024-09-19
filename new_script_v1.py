@@ -141,8 +141,9 @@ def make_request(url):
 def find_message(url):
     global db
     while not stop_event.is_set():
-        r = make_request(url)
         start_time = datetime.now()
+        time.sleep(0.3)
+        r = make_request(url)
         if r is None:
             continue
         elif r.text.startswith('{'):
